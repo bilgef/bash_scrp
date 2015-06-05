@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Betik, belirtilen parametrelere gore veritabanında guncelleme yapar.
+
+file=dosya_adi
+
+while read line
+do
+	param1=$(echo $line | awk -F'|' '{print $1}')
+	param2=$(echo $line | awk -F'|' '{print $2}')
+	
+
+sqlplus -s user/pass<<SqlText
+update table set param1=$param1 where param2=$param2;
+commit;
+exit;
+SqlText
+		
+		echo $param2 "|" $param1 "olarak update edildi."
+		
+done < $file
+
+echo "Parametreler guncellendi..."
